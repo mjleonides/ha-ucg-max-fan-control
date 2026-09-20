@@ -12,58 +12,56 @@ blueprint:
         entity:
           domain: sensor
     shell_command_entity:
-      name: Custom Shell SSH Command
-      description: Shell SSH command created in configuration.yaml
+      name: Custom Shell SSH Command Service
+      description: Shell-command service created in configuration.yaml, e.g. shell_command.set_ucg_max_fan_speed
       selector:
-        entity:
-          domain: action
+        text:
 
-  trigger:
-   - id: cpu_temperature_change
-     platform: numeric_state
-     entity_id: !input.cpu_temperature_entity
-   - id: ucg_restart
-     platform: time_pattern
-     minutes: '1'
-   - id: homeassistant_restart
-     platform: homeassistant
-     event: start
-  actions:
-   - choose:
-       - conditions:
-           - condition: numeric_state
-             entity_id: !input.cpu_temperature_entity
-             above: 78
-         sequence:
-           - action: !input.shell_command_entity
-             data:
-               speed: 255
-       - conditions:
-           - condition: numeric_state
-             entity_id: !input.cpu_temperature_entity
-             above: 68
-             below: 78.001
-         sequence:
-           - action: !input.shell_command_entity
-             data:
-               speed: 200
-       - conditions:
-           - condition: numeric_state
-             entity_id: !input.cpu_temperature_entity
-             above: 55
-             below: 68.001
-         sequence:
-           - action: !input.shell_command_entity
-             data:
-               speed: 150
-       - conditions:
-           - condition: numeric_state
-             entity_id: !input.cpu_temperature_entity
-             below: 55.001
-         sequence:
-           - action: !input.shell_command_entity
-             data:
-               speed: 100
+trigger:
+  - id: cpu_temperature_change
+    platform: numeric_state
+    entity_id: !input.cpu_temperature_entity
+  - id: ucg_restart
+    platform: time_pattern
+    minutes: '1'
+  - id: homeassistant_restart
+    platform: homeassistant
+    event: start
+action:
+  - choose:
+      - conditions:
+          - condition: numeric_state
+            entity_id: !input.cpu_temperature_entity
+            above: 78
+        sequence:
+          - action: !input.shell_command_entity
+            data:
+              speed: 255
+      - conditions:
+          - condition: numeric_state
+            entity_id: !input.cpu_temperature_entity
+            above: 68
+            below: 78.001
+        sequence:
+          - action: !input.shell_command_entity
+            data:
+              speed: 200
+      - conditions:
+          - condition: numeric_state
+            entity_id: !input.cpu_temperature_entity
+            above: 55
+            below: 68.001
+        sequence:
+          - action: !input.shell_command_entity
+            data:
+              speed: 150
+      - conditions:
+          - condition: numeric_state
+            entity_id: !input.cpu_temperature_entity
+            below: 55.001
+        sequence:
+          - action: !input.shell_command_entity
+            data:
+              speed: 100
 
-  mode: restart
-
+mode: restart
