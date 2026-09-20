@@ -20,7 +20,7 @@ blueprint:
 trigger:
   - id: cpu_temperature_change
     platform: numeric_state
-    entity_id: !input.cpu_temperature_entity
+    entity_id: !input cpu_temperature_entity
   - id: ucg_restart
     platform: time_pattern
     minutes: '1'
@@ -31,36 +31,36 @@ action:
   - choose:
       - conditions:
           - condition: numeric_state
-            entity_id: !input.cpu_temperature_entity
+            entity_id: !input cpu_temperature_entity
             above: 78
         sequence:
-          - action: !input.shell_command_entity
+          - action: !input shell_command_entity
             data:
               speed: 255
       - conditions:
           - condition: numeric_state
-            entity_id: !input.cpu_temperature_entity
+            entity_id: !input cpu_temperature_entity
             above: 68
             below: 78.001
         sequence:
-          - action: !input.shell_command_entity
+          - action: !input shell_command_entity
             data:
               speed: 200
       - conditions:
           - condition: numeric_state
-            entity_id: !input.cpu_temperature_entity
+            entity_id: !input cpu_temperature_entity
             above: 55
             below: 68.001
         sequence:
-          - action: !input.shell_command_entity
+          - action: !input shell_command_entity
             data:
               speed: 150
       - conditions:
           - condition: numeric_state
-            entity_id: !input.cpu_temperature_entity
+            entity_id: !input cpu_temperature_entity
             below: 55.001
         sequence:
-          - action: !input.shell_command_entity
+          - action: !input shell_command_entity
             data:
               speed: 100
 
